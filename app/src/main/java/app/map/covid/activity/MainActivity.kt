@@ -120,7 +120,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                             hashMap.put(
                                 "icon",
                                 com.naver.maps.map.R.drawable.navermap_default_marker_icon_green
-                            )//
+                            )
                         }
                     } else {
                         MarkerIcons.BLUE.also {
