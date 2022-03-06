@@ -3,6 +3,7 @@ package app.map.covid.activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -36,12 +37,18 @@ class LogoActivity : AppCompatActivity() {
         viewModel.callRetrofit()
         // 관찰하여 데이터 값이 변경되면 호출
         viewModel.nextActivity.observe(this, Observer { count ->
-            showProgress()
-            activityLogoBinding.pbProgressing.progress = count
-            if (count == 10) {
-                hideProgress()
-                startActivity(Intent(this@LogoActivity, MainActivity::class.java))
-                finish()
+
+            if (count <= 10) {
+                showProgress()
+                activityLogoBinding.pbProgressing.progress = count
+
+                if (count == 10) {
+                    hideProgress()
+                    startActivity(Intent(this@LogoActivity, MainActivity::class.java))
+                    finish()
+                }
+            } else {
+                Toast.makeText(this@LogoActivity, "서버 연결 중 문제가 발생하였습니다.", Toast.LENGTH_SHORT).show()
             }
         })
     }

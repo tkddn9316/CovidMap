@@ -54,6 +54,9 @@ class CovidViewModel(application: Application) : ViewModel() {
 
                     override fun onFailure(call: Call<CentersApi>, t: Throwable) {
                         // code == 500
+                        Log.d(TAG, t.toString())
+                        cancel()
+                        count.value = 500
                     }
                 })
                 delay(120L)
