@@ -28,44 +28,54 @@ class LogoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        setContentView(R.layout.activity_logo)
-        activityLogoBinding = DataBindingUtil.setContentView(this, R.layout.activity_logo)
+        activityLogoBinding = DataBindingUtil.setContentView<ActivityLogoBinding>(this, R.layout.activity_logo).apply {
+            lifecycleOwner = this@LogoActivity
+            vm = viewModel
+        }
 
         moveMain()
+
+        viewModel.onClickEvent.observe(this, Observer {
+            if (it.peekContent()) {
+                it.getContentIfNotHandled()?.let {
+                    startActivity(Intent(this@LogoActivity, MainActivity::class.java))
+                    finish()
+                }
+            }
+        })
     }
 
     private fun moveMain() {
+        activityLogoBinding.txtProgressingText.visibility = View.VISIBLE
         viewModel.callRetrofit()
         // 관찰하여 데이터 값이 변경되면 호출
         viewModel.nextActivity.observe(this, Observer { count ->
 
             if (count <= 10) {
                 showProgress()
-                activityLogoBinding.pbProgressing.progress = count
 
                 if (count == 10) {
                     hideProgress()
-                    startActivity(Intent(this@LogoActivity, MainActivity::class.java))
-                    finish()
+                    activityLogoBinding.btnNext.isClickable = true
                 }
             } else {
-                Toast.makeText(this@LogoActivity, "서버 연결 중 문제가 발생하였습니다.", Toast.LENGTH_SHORT).show()
+                activityLogoBinding.btnNext.isClickable = false
+                activityLogoBinding.pbSplashLoading.visibility = View.GONE
+                activityLogoBinding.txtProgressingText.text = resources.getString(R.string.splash_fail)
+                activityLogoBinding.imgNext.visibility = View.GONE
             }
         })
     }
 
     private fun showProgress() {
         activityLogoBinding.pbSplashLoading.visibility = View.VISIBLE
-        activityLogoBinding.pbProgressing.visibility = View.VISIBLE
-        activityLogoBinding.txtProgressingText.visibility = View.VISIBLE
+        activityLogoBinding.txtProgressingText.text = resources.getString(R.string.splash_loading)
+        activityLogoBinding.imgNext.visibility = View.GONE
     }
 
     private fun hideProgress() {
         activityLogoBinding.pbSplashLoading.visibility = View.GONE
-        activityLogoBinding.pbProgressing.visibility = View.GONE
-        activityLogoBinding.txtProgressingText.visibility = View.GONE
-    }
-
-    override fun onBackPressed() {
-
+        activityLogoBinding.txtProgressingText.text = resources.getString(R.string.splash_start)
+        activityLogoBinding.imgNext.visibility = View.VISIBLE
     }
 }

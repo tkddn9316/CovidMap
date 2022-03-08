@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">CovidMap</string>
+    <string name="splash_covid_goal">All You Need\nKnow About Covid-19</string>
+    <string name="splash_covid_discussion">코로나 바이러스 예방 접종센터\n지도 서비스 입니다.</string>
+    <string name="splash_loading">정보를 불러오는 중입니다.</string>
+    <string name="splash_start">Start Now</string>
+    <string name="splash_fail">서버 연결 중 문제가 발생하였습니다.</string>
+    <string name="made_by">Made By: SangWoo Choi</string>
 </resources>

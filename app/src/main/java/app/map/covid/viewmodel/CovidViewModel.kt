@@ -22,6 +22,8 @@ class CovidViewModel(application: Application) : ViewModel() {
     val responseData: MutableLiveData<CentersApi> = MutableLiveData()
     private val api = RetrofitDataClass.startRetrofit()
     internal val covidDao by lazy { provideCovidDao(application.baseContext) }
+    private val _onClickEvent = MutableLiveData<ClickEvent<Boolean>>()
+    val onClickEvent: LiveData<ClickEvent<Boolean>> = _onClickEvent
 
     fun callRetrofit() {
         CoroutineScope(Dispatchers.IO).launch {
@@ -62,6 +64,14 @@ class CovidViewModel(application: Application) : ViewModel() {
                 delay(120L)
             }
 
+        }
+    }
+
+    fun onClickEvent() {
+        if (count.value == 10) {
+            _onClickEvent.value = ClickEvent(true)
+        } else {
+            _onClickEvent.value = ClickEvent(false)
         }
     }
 }

@@ -3,48 +3,119 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <data>
+        <variable
+            name="vm"
+            type="app.map.covid.viewmodel.CovidViewModel" />
+    </data>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".activity.LogoActivity">
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/txt_progressing_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:text="정보를 불러오는 중입니다..."
-            android:textSize="15dp"
-            android:visibility="gone"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/pb_splash_loading" />
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:context=".activity.LogoActivity"
+                android:background="@drawable/bg"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:paddingTop="50dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/bg_img"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/splash_covid_goal"
+                    android:gravity="center"
+                    android:textSize="25dp"
+                    android:textColor="@color/color_32e0c4"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-black"
+                    android:letterSpacing="0.03"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="40dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/splash_covid_discussion"
+                    android:gravity="center"
+                    android:textSize="14dp"
+                    android:textColor="@color/white"
+                    android:layout_marginTop="10dp"/>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="370dp"
+                    android:layout_height="73dp"
+                    app:cardCornerRadius="10dp"
+                    app:cardBackgroundColor="@color/color_222831"
+                    android:layout_marginTop="40dp">
+
+                    <RelativeLayout
+                        android:id="@+id/btn_next"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="20dp"
+                        android:clickable="false"
+                        android:onClick="@{() -> vm.onClickEvent()}">
+
+                        <ProgressBar
+                            android:id="@+id/pb_splash_loading"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:visibility="gone"/>
+
+                        <TextView
+                            android:id="@+id/txt_progressing_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="10dp"
+                            android:text="@string/splash_loading"
+                            android:textColor="@color/color_32e0c4"
+                            android:textSize="18dp"
+                            android:textStyle="bold"
+                            android:visibility="gone"
+                            android:layout_toEndOf="@+id/pb_splash_loading"/>
+
+                        <ImageView
+                            android:id="@+id/img_next"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/next"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginEnd="10dp"
+                            android:visibility="gone"/>
+                    </RelativeLayout>
+                </androidx.cardview.widget.CardView>
 
 
-        <ProgressBar
-            android:id="@+id/pb_splash_loading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/made_by"
+                    android:textSize="15dp"
+                    android:textColor="@color/white"
+                    android:layout_marginTop="32dp"/>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
 
 
-        <ProgressBar
-            android:id="@+id/pb_progressing"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:max="10"
-            android:progressDrawable="@drawable/progress"
-            android:visibility="gone"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_progressing_text"
-            app:layout_constraintWidth_percent="0.5" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
