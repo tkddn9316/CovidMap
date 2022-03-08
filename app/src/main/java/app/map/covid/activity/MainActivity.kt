@@ -117,17 +117,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                     // 아이콘 설정
                     icon = if (it.centerType.contains("중앙")) {
                         MarkerIcons.GREEN.also {
-                            hashMap.put(
-                                "icon",
-                                com.naver.maps.map.R.drawable.navermap_default_marker_icon_green
-                            )
+                            hashMap["icon"] = R.drawable.navermap_default_marker_icon_green
                         }
                     } else {
                         MarkerIcons.BLUE.also {
-                            hashMap.put(
-                                "icon",
-                                com.naver.maps.map.R.drawable.navermap_default_marker_icon_blue
-                            )
+                            hashMap["icon"] = R.drawable.navermap_default_marker_icon_blue
                         }
                     }
                     // 해당 마커의 정보 지정

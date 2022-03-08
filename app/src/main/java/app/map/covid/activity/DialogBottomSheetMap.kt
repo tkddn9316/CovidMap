@@ -24,12 +24,12 @@ class DialogBottomSheetMap(context: Context, hashMap: HashMap<String, Any>) : Bo
         binding = DataBindingUtil.inflate(inflater, R.layout.dialog_bottom_sheet_map, container, false)
         val rootView = binding.root
 
-        binding.imgMarker.setImageResource(mHashMap.get("icon") as Int)
-        binding.txtCenterName.text = mHashMap.get("centerName").toString()
-        binding.txtFacilityName.text = mHashMap.get("facilityName").toString()
-        binding.txtAddress.text = mHashMap.get("address").toString()
-        binding.txtPhoneNumber.text = mHashMap.get("phoneNumber").toString()
-        binding.txtUpdate.text = mHashMap.get("updatedAt").toString()
+        binding.imgMarker.setImageResource(mHashMap["icon"] as Int)
+        binding.txtCenterName.text = mHashMap["centerName"].toString()
+        binding.txtFacilityName.text = mHashMap["facilityName"].toString()
+        binding.txtAddress.text = mHashMap["address"].toString()
+        binding.txtPhoneNumber.text = mHashMap["phoneNumber"].toString()
+        binding.txtUpdate.text = mHashMap["updatedAt"].toString()
 
         return rootView
     }
