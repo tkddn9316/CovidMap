@@ -6,6 +6,10 @@
 ## LogoActivity(Splash)
 * 소개
 
+|![KakaoTalk_20220308_150627820](https://user-images.githubusercontent.com/50853634/157177224-23a66abb-6a0a-42b0-be76-011b88cbbf5b.jpg)|![KakaoTalk_20220308_150627820_01](https://user-images.githubusercontent.com/50853634/157177391-f9417a0e-e8b1-4525-a06c-11c9b775d754.jpg)|
+|:---:|:---:|
+|공공 데이터로 정보 받는 중|정보 받기 성공 이후|
+
 앱 시작 시 가장 먼저 나오는 화면으로 코로나 검진 센터 100개의 데이터를 받아와 내부 DB에 저장한다.
 데이터는 시설명, 전화번호, 지역, 위도, 경도 등으로 이루어져 있다.
 * 사용 기술
