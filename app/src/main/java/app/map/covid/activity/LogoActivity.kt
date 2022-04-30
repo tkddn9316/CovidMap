@@ -18,7 +18,7 @@ import java.util.*
 
 class LogoActivity : AppCompatActivity() {
     companion object {
-        private const val TAG = "테스트"
+        private const val TAG = "test"
     }
 
     private lateinit var activityLogoBinding: ActivityLogoBinding
