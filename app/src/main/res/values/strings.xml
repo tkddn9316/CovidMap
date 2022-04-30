@@ -6,4 +6,10 @@
     <string name="splash_start">Start Now</string>
     <string name="splash_fail">서버 연결 중 문제가 발생하였습니다.</string>
     <string name="made_by">Made By: SangWoo Choi</string>
+
+
+    <string name="facebook_app_id">493887229152094</string>
+    <string name="fb_login_protocol_scheme">fb493887229152094</string>
+    <string name="facebook_client_token">200840b314edb310d0551b0708843d32</string>
+    <string name="test_access_token">IGQVJWOG45ZAlNzZAUlRZA1RtYUNhYzU5OGdndmR3UFF3ZAmpNLXFtZAldlcTQ2dmxGX0RjYndhNm9sWGxNV0FmS0h5Y1ZArMHpYdUcxV0ZAmdWJBWUFsN3JVNFVkMC1ScF82dGpHT1ZALb19ILVJxT3h2eTBvRAZDZD</string>
 </resources>

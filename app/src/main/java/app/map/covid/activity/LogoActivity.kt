@@ -3,7 +3,6 @@ package app.map.covid.activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -12,7 +11,10 @@ import app.map.covid.R
 import app.map.covid.databinding.ActivityLogoBinding
 import app.map.covid.viewmodel.CovidViewModel
 import app.map.covid.viewmodel.CovidViewModelFactory
+import com.facebook.login.Login
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.*
+import java.util.*
 
 class LogoActivity : AppCompatActivity() {
     companion object {
@@ -24,14 +26,17 @@ class LogoActivity : AppCompatActivity() {
     private val viewModel by lazy {
         ViewModelProvider(this, viewModelFactory).get(CovidViewModel::class.java)
     }
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        setContentView(R.layout.activity_logo)
-        activityLogoBinding = DataBindingUtil.setContentView<ActivityLogoBinding>(this, R.layout.activity_logo).apply {
-            lifecycleOwner = this@LogoActivity
-            vm = viewModel
-        }
+        activityLogoBinding =
+            DataBindingUtil.setContentView<ActivityLogoBinding>(this, R.layout.activity_logo)
+                .apply {
+                    lifecycleOwner = this@LogoActivity
+                    vm = viewModel
+                }
 
         moveMain()
 
@@ -61,7 +66,8 @@ class LogoActivity : AppCompatActivity() {
             } else {
                 activityLogoBinding.btnNext.isClickable = false
                 activityLogoBinding.pbSplashLoading.visibility = View.GONE
-                activityLogoBinding.txtProgressingText.text = resources.getString(R.string.splash_fail)
+                activityLogoBinding.txtProgressingText.text =
+                    resources.getString(R.string.splash_fail)
                 activityLogoBinding.imgNext.visibility = View.GONE
             }
         })
@@ -77,5 +83,13 @@ class LogoActivity : AppCompatActivity() {
         activityLogoBinding.pbSplashLoading.visibility = View.GONE
         activityLogoBinding.txtProgressingText.text = resources.getString(R.string.splash_start)
         activityLogoBinding.imgNext.visibility = View.VISIBLE
+    }
+
+    fun onClicked(view: View) {
+        when(view.id) {
+            R.id.button_sign_in -> {
+
+            }
+        }
     }
 }

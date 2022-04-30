@@ -7,6 +7,9 @@
         <variable
             name="vm"
             type="app.map.covid.viewmodel.CovidViewModel" />
+        <variable
+            name="view"
+            type="app.map.covid.activity.LogoActivity" />
     </data>
 
     <LinearLayout
@@ -116,6 +119,12 @@
                     android:textSize="15dp"
                     android:textColor="@color/white"
                     android:layout_marginTop="32dp"/>
+
+                <com.facebook.login.widget.LoginButton
+                    android:id="@+id/button_sign_in"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{view.onClicked}"/>
 
             </LinearLayout>
         </app.map.covid.util.AlwaysFadingEdge>
