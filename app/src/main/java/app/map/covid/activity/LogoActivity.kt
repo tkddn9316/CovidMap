@@ -11,7 +11,6 @@ import app.map.covid.R
 import app.map.covid.databinding.ActivityLogoBinding
 import app.map.covid.viewmodel.CovidViewModel
 import app.map.covid.viewmodel.CovidViewModelFactory
-import com.facebook.login.Login
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.*
 import java.util.*
@@ -43,8 +42,8 @@ class LogoActivity : AppCompatActivity() {
         viewModel.onClickEvent.observe(this, Observer {
             if (it.peekContent()) {
                 it.getContentIfNotHandled()?.let {
-                    startActivity(Intent(this@LogoActivity, MainActivity::class.java))
-                    finish()
+                    startActivity(Intent(this@LogoActivity, SettingActivity::class.java))
+//                    finish()
                 }
             }
         })
@@ -86,10 +85,8 @@ class LogoActivity : AppCompatActivity() {
     }
 
     fun onClicked(view: View) {
-        when(view.id) {
-            R.id.button_sign_in -> {
+        when (view.id) {
 
-            }
         }
     }
 }
