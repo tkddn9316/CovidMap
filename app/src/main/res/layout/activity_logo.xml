@@ -6,7 +6,7 @@
     <data>
         <variable
             name="vm"
-            type="app.map.covid.viewmodel.CovidViewModel" />
+            type="app.map.covid.viewmodel.LogoViewModel" />
         <variable
             name="view"
             type="app.map.covid.activity.LogoActivity" />

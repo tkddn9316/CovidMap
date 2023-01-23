@@ -12,6 +12,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModelProvider
 import app.map.covid.BR
 import app.map.covid.R
+import app.map.covid.util.FLog
 import app.map.covid.util.OnSingleClickListener
 
 abstract class BaseActivity<VDB : ViewDataBinding, VM : BaseViewModel> :

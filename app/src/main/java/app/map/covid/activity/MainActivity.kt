@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationSource: FusedLocationSource
     private lateinit var naverMap: NaverMap
-    internal val covidDao by lazy { provideCovidDao(application.baseContext) }
+    private val covidDao by lazy { provideCovidDao(application.baseContext) }
     private lateinit var dbList: List<CentersModel>
 
     override fun onCreate(savedInstanceState: Bundle?) {

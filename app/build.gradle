@@ -64,6 +64,9 @@ dependencies {
     // 네이버 지도 SDK
     implementation 'com.naver.maps:map-sdk:3.14.0'
     implementation("com.google.android.gms:play-services-location:19.0.1")
+    // rxjava
+    implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
 
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
     // Import the Firebase BoM
