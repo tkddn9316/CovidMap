@@ -1,17 +1,10 @@
 package app.map.covid.viewmodel
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.*
-import app.map.covid.db.provideCovidDao
-import app.map.covid.retrofit.CentersApi
-import app.map.covid.retrofit.RetrofitDataClass
-import kotlinx.coroutines.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import app.map.covid.base.BaseViewModel
 
-class CovidViewModel(application: Application) : ViewModel() {
+class MainViewModel(application: Application) : BaseViewModel(application) {
     companion object {
         private const val TAG = "테스트"
     }

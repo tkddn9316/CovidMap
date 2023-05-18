@@ -3,13 +3,11 @@ package app.map.covid.activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.databinding.DataBindingUtil
 import app.map.covid.R
 import app.map.covid.base.BaseActivity
 import app.map.covid.databinding.ActivityLogoBinding
+import app.map.covid.util.FLog
 import app.map.covid.viewmodel.LogoViewModel
-import kotlinx.coroutines.*
-import java.util.*
 
 class LogoActivity : BaseActivity<ActivityLogoBinding, LogoViewModel>() {
 
@@ -18,22 +16,23 @@ class LogoActivity : BaseActivity<ActivityLogoBinding, LogoViewModel>() {
     }
 
     override fun onCreateView(savedInstanceState: Bundle?) {
+        FLog.e("aa")
         moveMain()
-        viewModel.onClickEvent.observe(this, {
+        viewModel.onClickEvent.observe(this) {
             if (it.peekContent()) {
                 it.getContentIfNotHandled()?.let {
                     startActivity(Intent(this@LogoActivity, MainActivity::class.java))
                     finish()
                 }
             }
-        })
+        }
     }
 
     private fun moveMain() {
         binding.txtProgressingText.visibility = View.VISIBLE
         viewModel.callRetrofit()
         // 관찰하여 데이터 값이 변경되면 호출
-        viewModel.nextActivity.observe(this, { count ->
+        viewModel.nextActivity.observe(this) { count ->
 
             if (count <= 10) {
                 showProgress()
@@ -49,7 +48,7 @@ class LogoActivity : BaseActivity<ActivityLogoBinding, LogoViewModel>() {
                     resources.getString(R.string.splash_fail)
                 binding.imgNext.visibility = View.GONE
             }
-        })
+        }
     }
 
     private fun showProgress() {

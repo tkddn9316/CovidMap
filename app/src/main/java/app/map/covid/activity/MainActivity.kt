@@ -10,9 +10,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import app.map.covid.R
+import app.map.covid.base.BaseActivity
 import app.map.covid.databinding.ActivityMainBinding
 import app.map.covid.db.provideCovidDao
 import app.map.covid.retrofit.CentersModel
+import app.map.covid.viewmodel.MainViewModel
 import com.google.android.gms.location.*
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
@@ -27,7 +29,7 @@ import java.util.*
 import kotlin.collections.HashMap
 import kotlin.math.abs
 
-class MainActivity : AppCompatActivity(), OnMapReadyCallback {
+class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(), OnMapReadyCallback {
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
         private const val REFERANCE_LAT_X3 = 3 / 109.958489129649955
@@ -35,18 +37,18 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         private const val TAG = "테스트"
     }
 
-    private lateinit var activityMainBinding: ActivityMainBinding
+//    private lateinit var activityMainBinding: ActivityMainBinding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationSource: FusedLocationSource
     private lateinit var naverMap: NaverMap
     private val covidDao by lazy { provideCovidDao(application.baseContext) }
     private lateinit var dbList: List<CentersModel>
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_main)
-        activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+    override fun setup() {
+        setBinding(R.layout.activity_main, MainViewModel::class.java)
+    }
 
+    override fun onCreateView(savedInstanceState: Bundle?) {
         val mapFragment = supportFragmentManager.run {
             // 옵션 설정
             val option =
@@ -64,6 +66,29 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
         locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
     }
+
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+////        setContentView(R.layout.activity_main)
+//        activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+//
+//        val mapFragment = supportFragmentManager.run {
+//            // 옵션 설정
+//            val option =
+//                NaverMapOptions().mapType(NaverMap.MapType.Basic)
+//                    // 초기 카메라 위치: 부산광역시청, 줌: 16배(어차피 바로 현재 위치 받아와서...)
+//                    .camera(CameraPosition(LatLng(35.1798159, 129.0750222), 16.0))
+//                    .locationButtonEnabled(false)
+//            findFragmentById(R.id.map_covid) as MapFragment? ?: MapFragment.newInstance(option)
+//                .also {
+//                    beginTransaction().add(R.id.map_covid, it).commit()
+//                }
+//        }
+//        // 프래그먼트(MapFragment)의 getMapAsync() 메서드로 OnMapReadyCallback 을 등록하면 비동기로 NaverMap 객체를 얻을 수 있다고 한다.
+//        // NaverMap 객체가 준비되면 OnMapReady() 콜백 메서드 호출
+//        mapFragment.getMapAsync(this)
+//        locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
+//    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -91,7 +116,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(map: NaverMap) {
         map.locationSource = locationSource
         this.naverMap = map.apply {
-            activityMainBinding.btnLocation.map = this
+            binding.btnLocation.map = this
         }
 
         CoroutineScope(Dispatchers.IO).launch {

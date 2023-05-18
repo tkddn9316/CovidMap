@@ -8,7 +8,7 @@
             type="app.map.covid.activity.SettingActivity" />
 
         <variable
-            name="vm"
+            name="viewModel"
             type="app.map.covid.viewmodel.SettingViewModel" />
     </data>
 

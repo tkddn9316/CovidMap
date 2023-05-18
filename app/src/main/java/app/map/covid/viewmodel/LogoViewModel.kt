@@ -14,7 +14,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class LogoViewModel : BaseViewModel(Application()) {
+class LogoViewModel(application: Application) : BaseViewModel(application) {
     val count: MutableLiveData<Int> = MutableLiveData()
     val nextActivity: LiveData<Int>
         get() = count
@@ -23,6 +23,10 @@ class LogoViewModel : BaseViewModel(Application()) {
     internal val covidDao by lazy { provideCovidDao(getContext()) }
     private val _onClickEvent = MutableLiveData<ClickEvent<Boolean>>()
     val onClickEvent: LiveData<ClickEvent<Boolean>> = _onClickEvent
+
+    init {
+
+    }
 
     fun callRetrofit() {
         CoroutineScope(Dispatchers.IO).launch {
