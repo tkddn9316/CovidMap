@@ -14,10 +14,10 @@ class LogoViewModel(application: Application) : BaseViewModel(application) {
     private val covidDao by lazy { provideCovidDao(getContext()) }
     val progressingText = ObservableField("")
 
-    /** RxJava */
     fun getData() {
         loading.set(true)
         progressingText.set(getContext().getString(R.string.splash_loading))
+
         addDisposable(
             covidDao.deleteAll().networkThread().andThen(
                 // 10회 반복
@@ -27,6 +27,7 @@ class LogoViewModel(application: Application) : BaseViewModel(application) {
                     ApiModule.startRetrofit().getCovidCenter(it.toInt(), 10)
                         .networkThread().toFlowable()
                 }
+                .filter { it.centersModel.isNotEmpty() }
                 .flatMapCompletable {
                     FLog.e(it)
                     covidDao.insert(it.centersModel).networkThread()

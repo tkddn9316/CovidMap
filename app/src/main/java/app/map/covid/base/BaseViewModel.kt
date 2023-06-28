@@ -3,9 +3,9 @@ package app.map.covid.base
 import android.app.Application
 import android.content.Context
 import androidx.databinding.ObservableBoolean
+import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import app.map.covid.util.FLog
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Completable
@@ -19,11 +19,16 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 open class BaseViewModel(application: Application) : AndroidViewModel(application) {
     private val compositeDisposable = CompositeDisposable()
     val loading = ObservableBoolean(false)
-    val title: MutableLiveData<String> = MutableLiveData()
+    val title = ObservableField("")
+
     /** 완료 여부 */
     val done = MutableLiveData<Boolean>()
+
     /** 에러 감지 */
     val error = SingleLiveEvent<Throwable>()
+
+    /** AppBar BackButton */
+    val back = ObservableBoolean(true)
 
     /** RxJava 통신을 위한 함수 */
     fun addDisposable(disposable: Disposable) {
@@ -46,7 +51,7 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
             .doOnSubscribe {
                 AndroidSchedulers.mainThread().scheduleDirect { loading?.accept(true) }
             }
-            .doOnError {  }
+            .doOnError { }
             .doFinally { loading?.accept(false) }
     }
 
@@ -54,14 +59,10 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
         return subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe {
-                AndroidSchedulers.mainThread().scheduleDirect {
-                    loading?.accept(true)
-                }
+                AndroidSchedulers.mainThread().scheduleDirect { loading?.accept(true) }
             }
-            .doOnError {  }
-            .doFinally {
-                loading?.accept(false)
-            }
+            .doOnError { }
+            .doFinally { loading?.accept(false) }
     }
 
     fun Completable.networkThread(): Completable {

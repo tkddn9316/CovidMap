@@ -1,41 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <variable
-            name="view"
-            type="app.map.covid.base.BaseActivity" />
-
-        <variable
             name="vm"
             type="app.map.covid.base.BaseViewModel" />
+
+        <variable
+            name="view"
+            type="android.view.View.OnClickListener" />
+
     </data>
 
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="12dp">
+        android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/left_"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:onClick="@{view::onClick}"
             android:padding="12dp"
-            android:src="@drawable/next" />
+            android:src="@drawable/ic_back"
+            app:invisible="@{vm.back}"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/title_"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:text="@{vm.title}"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:layout_marginStart="47dp"
+            android:layout_marginEnd="47dp"
             android:textColor="@color/black"
             android:textSize="18sp"
             tools:text="sample" />
-    </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray_500"
+            android:layout_gravity="bottom"
+            />
+    </FrameLayout>
 </layout>

@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
+import android.widget.Toast
 import androidx.annotation.UiThread
 import androidx.core.app.ActivityCompat
 import app.map.covid.R
@@ -11,6 +12,7 @@ import app.map.covid.base.BaseActivity
 import app.map.covid.databinding.ActivityMainBinding
 import app.map.covid.db.provideCovidDao
 import app.map.covid.model.CentersModel
+import app.map.covid.util.Constant
 import app.map.covid.util.DialogBottomSheetMap
 import app.map.covid.util.FLog
 import app.map.covid.viewmodel.MainViewModel
@@ -30,12 +32,11 @@ import kotlin.math.abs
 class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(), OnMapReadyCallback {
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
-        private const val REFERANCE_LAT_X3 = 3 / 109.958489129649955
+        private const val REFERANCE_LAT_X3 = 3 / 109.95848912964996
         private const val REFERANCE_LNG_X3 = 3 / 88.74
-        private const val TAG = "테스트"
     }
 
-    //    private lateinit var activityMainBinding: ActivityMainBinding
+    private var backTime: Long = 0
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationSource: FusedLocationSource
     private lateinit var naverMap: NaverMap
@@ -210,6 +211,16 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(), OnMapRe
                     }
                 }
             }
+    }
+
+    override fun onBackPressed() {
+        val time = System.currentTimeMillis() - backTime
+        if (time >= Constant.BACK_PRESS_TIME) {
+            backTime = System.currentTimeMillis()
+            Toast.makeText(this, R.string.app_exit_instructions, Toast.LENGTH_SHORT).show()
+        } else {
+            super.onBackPressed()
+        }
     }
 
     // 지도상에 표시되고있는 마커들 지도에서 삭제
