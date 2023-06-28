@@ -6,7 +6,6 @@ import android.view.View
 import app.map.covid.R
 import app.map.covid.base.BaseActivity
 import app.map.covid.databinding.ActivityLogoBinding
-import app.map.covid.util.FLog
 import app.map.covid.viewmodel.LogoViewModel
 
 class LogoActivity : BaseActivity<ActivityLogoBinding, LogoViewModel>() {
@@ -16,50 +15,23 @@ class LogoActivity : BaseActivity<ActivityLogoBinding, LogoViewModel>() {
     }
 
     override fun onCreateView(savedInstanceState: Bundle?) {
-        FLog.e("aa")
-        moveMain()
-        viewModel.onClickEvent.observe(this) {
-            if (it.peekContent()) {
-                it.getContentIfNotHandled()?.let {
-                    startActivity(Intent(this@LogoActivity, MainActivity::class.java))
-                    finish()
-                }
+        viewModel.getData()
+    }
+
+    override fun onSingleClick(v: View) {
+        when (v.id) {
+            R.id.btn_next -> {
+                startActivity(Intent(this@LogoActivity, MainActivity::class.java))
+                finish()
             }
+
+            else -> super.onSingleClick(v)
         }
     }
 
-    private fun moveMain() {
-        binding.txtProgressingText.visibility = View.VISIBLE
-        viewModel.callRetrofit()
-        // 관찰하여 데이터 값이 변경되면 호출
-        viewModel.nextActivity.observe(this) { count ->
-
-            if (count <= 10) {
-                showProgress()
-
-                if (count == 10) {
-                    hideProgress()
-                    binding.btnNext.isClickable = true
-                }
-            } else {
-                binding.btnNext.isClickable = false
-                binding.pbSplashLoading.visibility = View.GONE
-                binding.txtProgressingText.text =
-                    resources.getString(R.string.splash_fail)
-                binding.imgNext.visibility = View.GONE
-            }
+    override fun onDone(b: Boolean) {
+        if (b) {
+            viewModel.progressingText.set(resources.getString(R.string.splash_start))
         }
-    }
-
-    private fun showProgress() {
-        binding.pbSplashLoading.visibility = View.VISIBLE
-        binding.txtProgressingText.text = resources.getString(R.string.splash_loading)
-        binding.imgNext.visibility = View.GONE
-    }
-
-    private fun hideProgress() {
-        binding.pbSplashLoading.visibility = View.GONE
-        binding.txtProgressingText.text = resources.getString(R.string.splash_start)
-        binding.imgNext.visibility = View.VISIBLE
     }
 }

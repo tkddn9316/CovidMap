@@ -4,16 +4,15 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
-import android.util.Log
 import androidx.annotation.UiThread
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.databinding.DataBindingUtil
 import app.map.covid.R
 import app.map.covid.base.BaseActivity
 import app.map.covid.databinding.ActivityMainBinding
 import app.map.covid.db.provideCovidDao
-import app.map.covid.retrofit.CentersModel
+import app.map.covid.model.CentersModel
+import app.map.covid.util.DialogBottomSheetMap
+import app.map.covid.util.FLog
 import app.map.covid.viewmodel.MainViewModel
 import com.google.android.gms.location.*
 import com.naver.maps.geometry.LatLng
@@ -26,7 +25,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
-import kotlin.collections.HashMap
 import kotlin.math.abs
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(), OnMapReadyCallback {
@@ -37,7 +35,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(), OnMapRe
         private const val TAG = "테스트"
     }
 
-//    private lateinit var activityMainBinding: ActivityMainBinding
+    //    private lateinit var activityMainBinding: ActivityMainBinding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationSource: FusedLocationSource
     private lateinit var naverMap: NaverMap
@@ -100,11 +98,12 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(), OnMapRe
                 grantResults
             )
         ) {
-            if (!locationSource.isActivated) { // 권한 거부됨
-                Log.d(TAG, "MainActivity - onRequestPermissionsResult 권한 거부됨")
+            if (!locationSource.isActivated) {
+                // 권한 거부됨
+                FLog.e("onRequestPermissionsResult 권한 거부")
                 naverMap.locationTrackingMode = LocationTrackingMode.None
             } else {
-                Log.d(TAG, "MainActivity - onRequestPermissionsResult 권한 승인됨")
+                FLog.e("onRequestPermissionsResult 권한 승인")
                 naverMap.locationTrackingMode = LocationTrackingMode.Follow // 현위치 버튼 컨트롤 활성
             }
             return

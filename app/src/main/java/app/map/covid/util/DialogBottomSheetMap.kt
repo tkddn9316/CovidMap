@@ -1,6 +1,5 @@
-package app.map.covid.activity
+package app.map.covid.util
 
-import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater

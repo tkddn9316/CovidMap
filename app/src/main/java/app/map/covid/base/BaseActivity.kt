@@ -6,6 +6,7 @@ import android.os.PersistableBundle
 import android.os.SystemClock
 import android.view.View
 import androidx.annotation.LayoutRes
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
@@ -43,6 +44,22 @@ abstract class BaseActivity<VDB : ViewDataBinding, VM : BaseViewModel> :
         onCreateView(savedInstanceState)
     }
 
+    override fun onResume() {
+        FLog.e(TAG, "onResume")
+        super.onResume().apply {
+            viewModel.done.observe(this@BaseActivity, this@BaseActivity::onDone)
+            viewModel.error.observe(this@BaseActivity, this@BaseActivity::onError)
+        }
+    }
+
+    override fun onPause() {
+        FLog.e(TAG, "onPause")
+        super.onPause().apply {
+            viewModel.done.removeObservers(this@BaseActivity)
+            viewModel.error.removeObservers(this@BaseActivity)
+        }
+    }
+
     override fun onDestroy() {
         FLog.e(TAG, "onDestroy")
         viewModel.onCleared()
@@ -63,7 +80,7 @@ abstract class BaseActivity<VDB : ViewDataBinding, VM : BaseViewModel> :
     }
 
     override fun onSingleClick(v: View) {
-        if(v.id == R.id.left_){
+        if (v.id == R.id.left_) {
             finish()
         }
     }
@@ -73,11 +90,10 @@ abstract class BaseActivity<VDB : ViewDataBinding, VM : BaseViewModel> :
     }
 
     override fun onClick(v: View?) {
-        val currentClickTime  = SystemClock.uptimeMillis()
-        val elapsedTime  = currentClickTime - lastClickTime
+        val currentClickTime = SystemClock.uptimeMillis()
+        val elapsedTime = currentClickTime - lastClickTime
         lastClickTime = currentClickTime
-        //duplicate
-        if(elapsedTime <= OnSingleClickListener.CLICK_INTERVAL){
+        if (elapsedTime <= OnSingleClickListener.CLICK_INTERVAL) {
             return
         }
         onSingleClick(v!!)
@@ -86,5 +102,16 @@ abstract class BaseActivity<VDB : ViewDataBinding, VM : BaseViewModel> :
 
     protected fun createView(@LayoutRes res: Int): View {
         return View.inflate(context, res, null)
+    }
+
+    protected open fun onDone(b: Boolean) {
+
+    }
+
+    protected open fun onError(error: Throwable) {
+        FLog.e(error.message!!)
+        AlertDialog.Builder(this@BaseActivity).setMessage(error.message)
+            .setPositiveButton("닫기", null)
+            .show()
     }
 }

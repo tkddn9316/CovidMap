@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import app.map.covid.util.FLog
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -19,6 +20,10 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
     private val compositeDisposable = CompositeDisposable()
     val loading = ObservableBoolean(false)
     val title: MutableLiveData<String> = MutableLiveData()
+    /** 완료 여부 */
+    val done = MutableLiveData<Boolean>()
+    /** 에러 감지 */
+    val error = SingleLiveEvent<Throwable>()
 
     /** RxJava 통신을 위한 함수 */
     fun addDisposable(disposable: Disposable) {
@@ -35,7 +40,7 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
         return getApplication<Application>().applicationContext
     }
 
-    fun <T> Single<Any>.networkThread(loading: Consumer<Boolean>? = null): Single<Any> {
+    fun <T : Any> Single<T>.networkThread(loading: Consumer<Boolean>? = null): Single<T> {
         return subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe {
@@ -45,7 +50,7 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
             .doFinally { loading?.accept(false) }
     }
 
-    fun <T> Flowable<Any>.networkThread(loading: Consumer<Boolean>? = null): Flowable<Any> {
+    fun <T : Any> Flowable<T>.networkThread(loading: Consumer<Boolean>? = null): Flowable<T> {
         return subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe {
@@ -57,5 +62,10 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
             .doFinally {
                 loading?.accept(false)
             }
+    }
+
+    fun Completable.networkThread(): Completable {
+        return subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
     }
 }

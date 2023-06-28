@@ -1,7 +1,8 @@
 package app.map.covid.db
 
 import androidx.room.*
-import app.map.covid.retrofit.CentersModel
+import app.map.covid.model.CentersModel
+import io.reactivex.rxjava3.core.Completable
 
 @Dao
 interface CovidDao {
@@ -11,6 +12,9 @@ interface CovidDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(centersModel: CentersModel)
 
-    @Delete
-    fun delete(covidEntity: CentersModel)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(data: List<CentersModel>): Completable
+
+    @Query("DELETE FROM CovidCenterTable")
+    fun deleteAll(): Completable
 }
