@@ -18,8 +18,7 @@
 3. MVVM
 4. ViewModel
 5. RxJava
-6. Coroutine
-7. DataBinding
+6. DataBinding
 
 ## MainActivity(Map)
 * 소개
