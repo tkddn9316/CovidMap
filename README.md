@@ -17,8 +17,9 @@
 2. Room
 3. MVVM
 4. ViewModel
-5. Coroutine
-6. DataBinding
+5. RxJava
+6. Coroutine
+7. DataBinding
 
 ## MainActivity(Map)
 * 소개
