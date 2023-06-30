@@ -31,6 +31,7 @@ import com.naver.maps.map.NaverMapOptions
 import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.FusedLocationSource
+import java.lang.Exception
 import kotlin.math.abs
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(), OnMapReadyCallback {
@@ -168,14 +169,23 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(), OnMapRe
     override fun onRefresh() {
         super.onRefresh()
         DialogRefresh(context) {
-            if (viewModel.markerList.isNotEmpty()) {
-                // 지도상에 표시되고 있는 마커들 삭제
-                for (marker: Marker in viewModel.markerList) {
-                    marker.map = null
+            val count = it.toLong()
+            if (count <= 200) {
+                if (viewModel.markerList.isNotEmpty()) {
+                    // 지도상에 표시되고 있는 마커들 삭제
+                    for (marker: Marker in viewModel.markerList) {
+                        marker.map = null
+                    }
+                    viewModel.markerList.clear()
                 }
-                viewModel.markerList.clear()
+                try {
+                    viewModel.resetMarkers(count)
+                } catch (e: Exception) {
+                    Toast.makeText(this, R.string.error_content, Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(this, R.string.to_many_markers, Toast.LENGTH_SHORT).show()
             }
-            viewModel.resetMarkers(it.toLong())
         }.show()
     }
 
