@@ -82,6 +82,8 @@ abstract class BaseActivity<VDB : ViewDataBinding, VM : BaseViewModel> :
     override fun onSingleClick(v: View) {
         if (v.id == R.id.left_) {
             finish()
+        } else {
+            onRefresh()
         }
     }
 
@@ -104,6 +106,10 @@ abstract class BaseActivity<VDB : ViewDataBinding, VM : BaseViewModel> :
         return View.inflate(context, res, null)
     }
 
+    protected open fun onRefresh() {
+
+    }
+
     protected open fun onDone(b: Boolean) {
 
     }
@@ -111,7 +117,7 @@ abstract class BaseActivity<VDB : ViewDataBinding, VM : BaseViewModel> :
     protected open fun onError(error: Throwable) {
         FLog.e(error.message!!)
         AlertDialog.Builder(this@BaseActivity).setMessage(error.message)
-            .setPositiveButton("닫기", null)
+            .setPositiveButton(getString(R.string.close), null)
             .show()
     }
 }

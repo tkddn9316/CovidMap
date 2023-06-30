@@ -1,4 +1,4 @@
-package app.map.covid.util
+package app.map.covid.view
 
 import android.content.Context
 import android.os.Bundle
@@ -19,7 +19,7 @@ class DialogBottomSheetMap(context: Context, hashMap: HashMap<String, Any>) : Bo
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.dialog_bottom_sheet_map, container, false)
         val rootView = binding.root
 
