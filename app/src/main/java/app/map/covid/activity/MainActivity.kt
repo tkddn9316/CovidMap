@@ -5,46 +5,47 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.annotation.UiThread
 import androidx.core.app.ActivityCompat
 import app.map.covid.R
 import app.map.covid.base.BaseActivity
 import app.map.covid.databinding.ActivityMainBinding
-import app.map.covid.db.provideCovidDao
-import app.map.covid.model.CentersModel
 import app.map.covid.util.Constant
-import app.map.covid.util.DialogBottomSheetMap
+import app.map.covid.util.Constant.LOCATION_PERMISSION_REQUEST_CODE
+import app.map.covid.util.Constant.REFERANCE_LAT_X3
+import app.map.covid.util.Constant.REFERANCE_LNG_X3
 import app.map.covid.util.FLog
+import app.map.covid.view.DialogBottomSheetMap
+import app.map.covid.view.DialogRefresh
 import app.map.covid.viewmodel.MainViewModel
-import com.google.android.gms.location.*
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.naver.maps.geometry.LatLng
-import com.naver.maps.map.*
+import com.naver.maps.map.CameraAnimation
+import com.naver.maps.map.CameraPosition
+import com.naver.maps.map.CameraUpdate
+import com.naver.maps.map.LocationTrackingMode
+import com.naver.maps.map.MapFragment
+import com.naver.maps.map.NaverMap
+import com.naver.maps.map.NaverMapOptions
+import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.FusedLocationSource
-import com.naver.maps.map.util.MarkerIcons
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.util.*
+import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.abs
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(), OnMapReadyCallback {
-    companion object {
-        private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
-        private const val REFERANCE_LAT_X3 = 3 / 109.95848912964996
-        private const val REFERANCE_LNG_X3 = 3 / 88.74
-    }
-
     private var backTime: Long = 0
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationSource: FusedLocationSource
     private lateinit var naverMap: NaverMap
-    private val covidDao by lazy { provideCovidDao(application.baseContext) }
-    private lateinit var dbList: List<CentersModel>
+
+    override val viewModel: MainViewModel by viewModels()
 
     override fun setup() {
-        setBinding(R.layout.activity_main, MainViewModel::class.java)
+        setBinding(R.layout.activity_main)
     }
 
     override fun onCreateView(savedInstanceState: Bundle?) {
@@ -65,29 +66,6 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(), OnMapRe
         mapFragment.getMapAsync(this)
         locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
     }
-
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-////        setContentView(R.layout.activity_main)
-//        activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-//
-//        val mapFragment = supportFragmentManager.run {
-//            // 옵션 설정
-//            val option =
-//                NaverMapOptions().mapType(NaverMap.MapType.Basic)
-//                    // 초기 카메라 위치: 부산광역시청, 줌: 16배(어차피 바로 현재 위치 받아와서...)
-//                    .camera(CameraPosition(LatLng(35.1798159, 129.0750222), 16.0))
-//                    .locationButtonEnabled(false)
-//            findFragmentById(R.id.map_covid) as MapFragment? ?: MapFragment.newInstance(option)
-//                .also {
-//                    beginTransaction().add(R.id.map_covid, it).commit()
-//                }
-//        }
-//        // 프래그먼트(MapFragment)의 getMapAsync() 메서드로 OnMapReadyCallback 을 등록하면 비동기로 NaverMap 객체를 얻을 수 있다고 한다.
-//        // NaverMap 객체가 준비되면 OnMapReady() 콜백 메서드 호출
-//        mapFragment.getMapAsync(this)
-//        locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
-//    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -118,61 +96,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(), OnMapRe
         this.naverMap = map.apply {
             binding.btnLocation.map = this
         }
-
-        CoroutineScope(Dispatchers.IO).launch {
-            // DB SELECT
-            dbList = covidDao.getAll()
-
-            // 마커 생성(개수가 많으니까 백그라운드에서)
-            val markers = mutableListOf<Marker>()
-            dbList.forEach {
-                markers += Marker().apply {
-                    // 마커의 위치 지정
-                    position = LatLng(it.lat.toDouble(), it.lng.toDouble())
-
-                    // 마커의 정보를 담을 해쉬맵
-                    val hashMap = HashMap<String, Any>().apply {
-                        put("id", it.id)
-                        put("address", it.address)
-                        put("centerName", it.centerName)
-                        put("facilityName", it.facilityName)
-                        put("phoneNumber", it.phoneNumber)
-                        put("updatedAt", it.updatedAt)
-                    }
-                    // 아이콘 설정
-                    icon = if (it.centerType.contains("중앙")) {
-                        MarkerIcons.GREEN.also {
-                            hashMap["icon"] = R.drawable.navermap_default_marker_icon_green
-                        }
-                    } else {
-                        MarkerIcons.BLUE.also {
-                            hashMap["icon"] = R.drawable.navermap_default_marker_icon_blue
-                        }
-                    }
-                    // 해당 마커의 정보 지정
-                    tag = hashMap
-                    isHideCollidedSymbols = true
-                    isIconPerspectiveEnabled = true
-                    setOnClickListener {
-                        naverMap.moveCamera(
-                            CameraUpdate.scrollAndZoomTo(position, 16.0)
-                                .animate(CameraAnimation.Easing)
-                        )
-                        DialogBottomSheetMap(this@MainActivity, hashMap).apply {
-                            show(supportFragmentManager, tag)
-                        }
-                        true
-                    }
-                }
-            }
-
-            withContext(Dispatchers.Main) {
-                // 마커 지도 표시(메인 스레드에서)
-                markers.forEach { marker ->
-                    marker.map = naverMap
-                }
-            }
-        }
+        viewModel.setMarkers()
 
         if (ActivityCompat.checkSelfPermission(
                 this,
@@ -198,7 +122,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(), OnMapRe
                         position = LatLng(currentLocation!!.latitude, currentLocation!!.longitude)
                     }
 
-                    // 카메라 현재위치로 이동
+                    // 카메라 현재 위치로 이동
                     val cameraUpdate = CameraUpdate.scrollTo(
                         LatLng(
                             currentLocation!!.latitude,
@@ -213,6 +137,29 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(), OnMapRe
             }
     }
 
+    override fun onDone(b: Boolean) {
+        if (b) {
+            // 마커 적용
+            viewModel.markerList.forEach { marker ->
+                marker.map = naverMap
+                marker.setOnClickListener {
+                    naverMap.moveCamera(
+                        CameraUpdate.scrollAndZoomTo(marker.position, 16.0)
+                            .animate(CameraAnimation.Easing)
+                    )
+                    DialogBottomSheetMap(
+                        this@MainActivity,
+                        marker.tag as HashMap<String, Any>
+                    ).apply {
+                        show(supportFragmentManager, tag)
+                    }
+                    true
+                }
+            }
+            viewModel.done.value = false
+        }
+    }
+
     override fun onBackPressed() {
         val time = System.currentTimeMillis() - backTime
         if (time >= Constant.BACK_PRESS_TIME) {
@@ -223,11 +170,27 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(), OnMapRe
         }
     }
 
-    // 지도상에 표시되고있는 마커들 지도에서 삭제
-    private fun freeActiveMarkers(markers: MutableList<Marker>) {
-        for (marker: Marker in markers) {
-            marker.map = null
-        }
+    override fun onRefresh() {
+        super.onRefresh()
+        DialogRefresh(context) {
+            val count = it.toLong()
+            if (count <= 200) {
+                if (viewModel.markerList.isNotEmpty()) {
+                    // 지도상에 표시되고 있는 마커들 삭제
+                    for (marker: Marker in viewModel.markerList) {
+                        marker.map = null
+                    }
+                    viewModel.markerList.clear()
+                }
+                try {
+                    viewModel.resetMarkers(count)
+                } catch (e: Exception) {
+                    Toast.makeText(this, R.string.error_content, Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(this, R.string.to_many_markers, Toast.LENGTH_SHORT).show()
+            }
+        }.show()
     }
 
     // 현재 카메라가 보고있는 위치

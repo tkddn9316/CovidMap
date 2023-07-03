@@ -30,6 +30,9 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
     /** AppBar BackButton */
     val back = ObservableBoolean(true)
 
+    /** AppBar RefreshButton */
+    val refresh = ObservableBoolean(true)
+
     /** RxJava 통신을 위한 함수 */
     fun addDisposable(disposable: Disposable) {
         compositeDisposable.add(disposable)

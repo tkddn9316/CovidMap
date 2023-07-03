@@ -8,7 +8,14 @@
     <string name="splash_fail">서버 연결 중 문제가 발생하였습니다.</string>
     <string name="made_by">Made By: SangWoo Choi</string>
     <string name="app_exit_instructions">한번 더 누르시면 종료됩니다.</string>
+    <string name="error_content">일시적인 오류 발생 하였습니다.</string>
+    <string name="to_many_markers">마커의 개수는 200개를 넘을 수 없습니다.</string>
 
     <string name="title_main">메인</string>
     <string name="title_setting">설정</string>
+    <string name="dialog_refresh_contents">마커를 새롭게 다시 그립니다.\n마커 개수를 입력하세요.(최대 200개)</string>
+    <string name="yes">네</string>
+    <string name="no">아니오</string>
+    <string name="close">닫기</string>
+    <string name="central">중앙</string>
 </resources>

@@ -5,7 +5,9 @@ import android.app.Application.ActivityLifecycleCallbacks
 import android.os.Bundle
 import androidx.multidex.MultiDexApplication
 import app.map.covid.util.FLog
+import dagger.hilt.android.HiltAndroidApp
 
+@HiltAndroidApp
 class FApplication : MultiDexApplication(), ActivityLifecycleCallbacks {
 
     override fun onCreate() {

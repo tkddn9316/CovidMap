@@ -2,8 +2,9 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'com.google.gms.google-services'
+    id 'kotlin-kapt'
+    id 'com.google.dagger.hilt.android'
 }
-apply plugin: 'kotlin-kapt'
 
 android {
     compileSdk 33
@@ -79,6 +80,10 @@ static def getDateTime() {
     new Date().format('MMddhhmm')
 }
 
+kapt {
+    correctErrorTypes = true
+}
+
 dependencies {
     def roomVersion = "2.4.1"
 
@@ -115,4 +120,11 @@ dependencies {
     // When using the BoM, don't specify versions in Firebase dependencies
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-auth'
+
+    implementation("com.google.dagger:hilt-android:2.44")
+    kapt("com.google.dagger:hilt-android-compiler:2.44")
+
+    // ktx
+    implementation 'androidx.activity:activity-ktx:1.7.2'
+    implementation 'androidx.fragment:fragment-ktx:1.6.0'
 }

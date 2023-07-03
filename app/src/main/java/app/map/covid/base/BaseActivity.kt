@@ -2,7 +2,6 @@ package app.map.covid.base
 
 import android.content.Context
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.os.SystemClock
 import android.view.View
 import androidx.annotation.LayoutRes
@@ -10,7 +9,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
 import app.map.covid.BR
@@ -21,7 +19,7 @@ import app.map.covid.util.OnSingleClickListener
 abstract class BaseActivity<VDB : ViewDataBinding, VM : BaseViewModel> :
     AppCompatActivity(), ViewModelStoreOwner, OnSingleClickListener {
     lateinit var binding: VDB
-    lateinit var viewModel: VM
+    abstract val viewModel: VM
     protected lateinit var context: Context
     protected lateinit var activity: BaseActivity<VDB, VM>
     private var lastClickTime = 0L
@@ -74,14 +72,16 @@ abstract class BaseActivity<VDB : ViewDataBinding, VM : BaseViewModel> :
         }
     }
 
-    protected fun setBinding(@LayoutRes layoutId: Int, modelClass: Class<VM>) {
-        viewModel = FViewModelFactory.getInstance(this).create(modelClass)
-        setBinding(layoutId)
-    }
+//    protected fun setBinding(@LayoutRes layoutId: Int, modelClass: Class<VM>) {
+//        viewModel = FViewModelFactory.getInstance(this).create(modelClass)
+//        setBinding(layoutId)
+//    }
 
     override fun onSingleClick(v: View) {
         if (v.id == R.id.left_) {
             finish()
+        } else {
+            onRefresh()
         }
     }
 
@@ -97,11 +97,14 @@ abstract class BaseActivity<VDB : ViewDataBinding, VM : BaseViewModel> :
             return
         }
         onSingleClick(v!!)
-
     }
 
     protected fun createView(@LayoutRes res: Int): View {
-        return View.inflate(context, res, null)
+        return View.inflate(applicationContext, res, null)
+    }
+
+    protected open fun onRefresh() {
+
     }
 
     protected open fun onDone(b: Boolean) {
@@ -111,7 +114,7 @@ abstract class BaseActivity<VDB : ViewDataBinding, VM : BaseViewModel> :
     protected open fun onError(error: Throwable) {
         FLog.e(error.message!!)
         AlertDialog.Builder(this@BaseActivity).setMessage(error.message)
-            .setPositiveButton("닫기", null)
+            .setPositiveButton(getString(R.string.close), null)
             .show()
     }
 }

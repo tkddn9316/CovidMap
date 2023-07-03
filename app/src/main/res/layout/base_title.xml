@@ -39,11 +39,22 @@
             android:text="@{vm.title}"
             android:maxLines="1"
             android:ellipsize="end"
-            android:layout_marginStart="47dp"
-            android:layout_marginEnd="47dp"
+            android:layout_marginStart="45dp"
+            android:layout_marginEnd="45dp"
             android:textColor="@color/black"
             android:textSize="18sp"
             tools:text="sample" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/right_"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|end"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:onClick="@{view::onClick}"
+            android:padding="12dp"
+            android:src="@drawable/ic_baseline_refresh_24"
+            app:invisible="@{vm.refresh}"/>
 
         <View
             android:layout_width="match_parent"
