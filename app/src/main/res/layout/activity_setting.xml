@@ -5,11 +5,11 @@
 
         <variable
             name="view"
-            type="app.map.covid.activity.SettingActivity" />
+            type="app.map.covid.view.activity.SettingActivity" />
 
         <variable
             name="viewModel"
-            type="app.map.covid.viewmodel.SettingViewModel" />
+            type="app.map.covid.view.viewmodel.SettingViewModel" />
     </data>
 
     <FrameLayout

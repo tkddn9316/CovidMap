@@ -6,16 +6,16 @@
     <data>
         <variable
             name="viewModel"
-            type="app.map.covid.viewmodel.LogoViewModel" />
+            type="app.map.covid.view.viewmodel.LogoViewModel" />
         <variable
             name="view"
-            type="app.map.covid.activity.LogoActivity" />
+            type="app.map.covid.view.activity.LogoActivity" />
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".activity.LogoActivity"
+        tools:context=".view.activity.LogoActivity"
         android:orientation="vertical">
 
         <ScrollView

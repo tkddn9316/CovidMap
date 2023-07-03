@@ -7,11 +7,11 @@
 
         <variable
             name="viewModel"
-            type="app.map.covid.viewmodel.MainViewModel" />
+            type="app.map.covid.view.viewmodel.MainViewModel" />
 
         <variable
             name="view"
-            type="app.map.covid.activity.MainActivity" />
+            type="app.map.covid.view.activity.MainActivity" />
     </data>
 
     <FrameLayout

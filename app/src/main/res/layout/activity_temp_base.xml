@@ -8,11 +8,11 @@
 
         <variable
             name="viewModel"
-            type="app.map.covid.viewmodel.LogoViewModel" />
+            type="app.map.covid.view.viewmodel.LogoViewModel" />
 
         <variable
             name="view"
-            type="app.map.covid.activity.LogoActivity" />
+            type="app.map.covid.view.activity.LogoActivity" />
     </data>
 
     <FrameLayout

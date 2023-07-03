@@ -7,7 +7,7 @@
 
         <variable
             name="vm"
-            type="app.map.covid.base.BaseViewModel" />
+            type="app.map.covid.view.base.BaseViewModel" />
 
         <variable
             name="view"
