@@ -4,21 +4,22 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
-import androidx.activity.OnBackPressedDispatcher
+import androidx.activity.viewModels
 import app.map.covid.R
 import app.map.covid.base.BaseActivity
 import app.map.covid.databinding.ActivityLogoBinding
 import app.map.covid.util.Constant.BACK_PRESS_TIME
-import app.map.covid.util.FLog
 import app.map.covid.viewmodel.LogoViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LogoActivity : BaseActivity<ActivityLogoBinding, LogoViewModel>() {
-
     private var backTime: Long = 0
 
+    override val viewModel: LogoViewModel by viewModels()
+
     override fun setup() {
-        setBinding(R.layout.activity_logo, LogoViewModel::class.java)
+        setBinding(R.layout.activity_logo)
     }
 
     override fun onCreateView(savedInstanceState: Bundle?) {
