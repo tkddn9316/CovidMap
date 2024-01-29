@@ -2,17 +2,17 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'com.google.gms.google-services'
-    id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
+    id 'com.google.devtools.ksp'
 }
 
 android {
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "app.map.covid"
         minSdk 23
-        targetSdk 33
+        targetSdk 34
         versionCode 1
         versionName "1.0.1"
 
@@ -51,6 +51,7 @@ android {
     buildFeatures {
         dataBinding = true
     }
+    namespace 'app.map.covid'
 
 //    flavorDimensions "default"
 //    productFlavors {
@@ -80,51 +81,59 @@ static def getDateTime() {
     new Date().format('MMddhhmm')
 }
 
-kapt {
-    correctErrorTypes = true
-}
-
 dependencies {
-    def roomVersion = "2.4.1"
+    def roomVersion = "2.6.1"
 
-    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'com.google.android.material:material:1.11.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     testImplementation 'junit:junit:'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     implementation 'com.android.support:multidex:1.0.3'
+
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava3:2.9.0'
-    // GSON
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+
     // Scalars
     implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
+
     // Room DataBase
-    kapt("androidx.room:room-compiler:$roomVersion")
+    ksp("androidx.room:room-compiler:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
     implementation("androidx.room:room-rxjava3:$roomVersion")
+
     // 네이버 지도 SDK
     implementation 'com.naver.maps:map-sdk:3.16.2'
     implementation("com.google.android.gms:play-services-location:19.0.1")
+
     // rxjava
     implementation 'io.reactivex.rxjava3:rxjava:3.0.3'
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
 
+    // coroutine
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1'
+
+    // flexbox
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
+
     // Import the Firebase BoM
     implementation platform('com.google.firebase:firebase-bom:29.3.1')
+
     // Add the dependency for the Firebase SDK for Google Analytics
     // When using the BoM, don't specify versions in Firebase dependencies
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-auth'
 
+    // hilt
     implementation("com.google.dagger:hilt-android:2.44")
-    kapt("com.google.dagger:hilt-android-compiler:2.44")
+    ksp("com.google.dagger:hilt-android-compiler:2.44")
 
     // ktx
-    implementation 'androidx.activity:activity-ktx:1.7.2'
-    implementation 'androidx.fragment:fragment-ktx:1.6.0'
+    implementation 'androidx.activity:activity-ktx:1.8.2'
+    implementation 'androidx.fragment:fragment-ktx:1.6.2'
 }
